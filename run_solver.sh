@@ -3,7 +3,7 @@
 set -e
 
 echo "== compiling ==";
-g++ -std=c++17 -o bin/calculate src/boggle.cpp
+g++ -std=c++17 -o bin/calculate lib/boggle.cpp
 
 echo "== running tests==";
 for testfile in `ls -1 tests`; do

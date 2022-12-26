@@ -1,15 +1,22 @@
+#include <chrono>
+#include <cstdlib>
+#include <set>
+#include <ctime>
 #include <fstream>
+#include <cstdio>
+#include <ostream>
 #include <queue>
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <array>
 #include <string>
+#include <unordered_map>
 
+#include "boggle.h"
 
 const std::string WORDS_FILE = "/Users/dogzone/dev/2022/bogglefinder/dicts/words.txt"; //"~/dev/bogglefinder/words.txt";
 const int SZ = 5;
-
 
 struct BoggleTile
 {
@@ -17,7 +24,6 @@ struct BoggleTile
 };
 
 using BoggleBoard = std::array<std::array<BoggleTile, 5>, 5>;
-
 
 struct TrieNode
 {
@@ -86,6 +92,8 @@ auto construct_trie (TrieNode& root, std::string filepath) -> void
 	std::string word;
 	while (file >> word)
 	{
+		if (word.length() < 3)
+			continue;
 		trie_insert(root, word);
 	}
 }
@@ -112,13 +120,12 @@ inline int mask_from(int r, int c)
 }
 
 
-void find_all_words_with_trie(const BoggleBoard& board, TrieNode* trie, std::vector<std::string>& foundWords, int r = 0, int c = 0, int seen = 0)
+void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::string>& foundWords, int r = 0, int c = 0, int seen = 0)
 {
 	seen |= mask_from(r, c);
-	
 	if (trie->terminal)
 	{
-		foundWords.push_back(trace_word(trie));
+		foundWords.insert(trace_word(trie));
 	}
 
 	// perform a complete search Boggle board using backtracking. use a pre-calculated trie to short-circuit iterations when no valid word could be found
@@ -133,12 +140,26 @@ void find_all_words_with_trie(const BoggleBoard& board, TrieNode* trie, std::vec
 		auto& tile = board[nr][nc];
 		for (const char& c : tile.value)
 		{
-			if (trie->children[c - 'A'] == nullptr) // stop searching this path
+			int idx = c-'A';
+			if (trie->children[idx] == nullptr) 
 				break;
 
-			find_all_words_with_trie(board, trie->children[c - 'A'], foundWords, nr, nc, seen);
+			trie_guided_search(board, trie->children[idx], foundWords, nr, nc, seen);
 		}
 	}
+}
+
+auto find_all_words_with_trie(const BoggleBoard& board, TrieNode* root)
+{
+	std::set<std::string> foundWords;
+	for (int r = 0; r < SZ; ++r)
+	{
+		for (int c = 0; c < SZ; ++c)
+		{
+			trie_guided_search(board, root, foundWords, r, c);
+		}
+	}
+	return foundWords;
 }
 
 
@@ -247,7 +268,6 @@ auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::vec
 	return results;
 }
 
-
 int main () 
 {
 	std::cout << "Input rows of boggle board:" << std::endl;
@@ -298,13 +318,13 @@ int main ()
 	construct_trie(root, WORDS_FILE); 
 	printf("Trie contains 'AARDVARK'? %s\n", (trie_contains(root, "AARDVARK") ? "Yes" : "No, you have failed."));
 	printf("Board contains 'COOL'? %s\n", (board_contains(board, "COOL") ? "Yes" : "No, you have failed."));
-	std::vector<std::string> wordFromTrieSeach;
-	find_all_words_with_trie(board, &root, wordFromTrieSeach);
-	
+	auto wordsFromTrieSearch = find_all_words_with_trie(board, &root);
+
 	auto allWords = find_all_words(board, WORDS_FILE);
+
 	print_board();
 	printf("This board contains %lu words!\n", allWords.size());
-	printf("According to Trie, it contains %lu words.\n", wordFromTrieSeach.size());
+	printf("According to Trie, it contains %lu words.\n", wordsFromTrieSearch.size());
 	
 	std::sort(allWords.begin(), allWords.end(), [] (const auto& a, const auto& b) {
 			return a.length() > b.length();
