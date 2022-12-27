@@ -174,7 +174,7 @@ void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::
 			}
 		}
 
-		trie_guided_search(board, trie->children[idx], foundWords, currentWord, nr, nc, seen);
+		trie_guided_search(board, nextTrie, foundWords, currentWord, nr, nc, seen);
 	}
 	// backtrack
 	currentWord.pop_back();
