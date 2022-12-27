@@ -130,11 +130,14 @@ inline int mask_from(int r, int c)
 	return 1 << (SZ * r + c + 1);
 }
 
-
+// TODO: Handle "Qu" tile, which needs to push two letters to `currentWord` (and clean up after itself, popping two letters as well).
 void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::string>& foundWords, std::string& currentWord, int r, int c, int seen)
 {
-	currentWord.push_back(trie->letter);
+	if (trie->letter != '*')
+		currentWord.push_back(trie->letter);
+
 	seen |= mask_from(r, c);
+
 	if (trie->terminal)
 	{
 		foundWords.insert(currentWord);
@@ -150,14 +153,28 @@ void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::
 			continue;	
 
 		auto& tile = board[nr][nc];
-		for (const char& c : tile.value)
-		{
-			int idx = c-'A';
-			if (trie->children[idx] == nullptr) 
-				break;
 
-			trie_guided_search(board, trie->children[idx], foundWords, currentWord, nr, nc, seen);
+		char c = tile.value.front();
+		int idx = c-'A';
+
+		if (trie->children[idx] == nullptr) 
+			continue;
+
+		auto nextTrie = trie->children[idx];
+
+		if (c == 'Q')
+		{
+			if (nextTrie->children['U' - 'A'] == nullptr)
+			{
+				continue;
+			}
+			else
+			{
+				nextTrie = nextTrie->children['U' - 'A'];
+			}
 		}
+
+		trie_guided_search(board, trie->children[idx], foundWords, currentWord, nr, nc, seen);
 	}
 	// backtrack
 	currentWord.pop_back();

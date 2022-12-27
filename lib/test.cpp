@@ -51,8 +51,10 @@ int main ()
 	std::set_difference(allWords.begin(), allWords.end(), wordsFromTrieSearch.begin(), wordsFromTrieSearch.end(),
 			std::inserter(difference, difference.begin()));
 
+	log << "Board:\n" << board << "\n\n";
 	// Report on difference
 	report_differences(log, allWordsSet, wordsFromTrieSearch);
+	log << std::endl;
 
 	std::cout << board;
 	printf("This board contains %lu words!\n", allWordsSet.size());
