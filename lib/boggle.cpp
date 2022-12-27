@@ -180,7 +180,7 @@ auto find_all_words_with_trie(const BoggleBoard& board, TrieNode* root) -> std::
 	{
 		for (int c = 0; c < SZ; ++c)
 		{
-			trie_guided_search(board, root, foundWords, currentWord, r, c);
+			trie_guided_search(board, root, foundWords, currentWord, r, c, 0);
 		}
 	}
 	return foundWords;
