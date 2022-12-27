@@ -65,3 +65,70 @@ UFO
 USE
 USER
 
+Board:
+____________________
+| Y | T | Y | L | O |
+| T | U | R | L | T |
+| H | R | O | E | I |
+| A | G | K | R | E |
+| S | E | E | T | A |
+____________________
+
+
+Number of words: 400 | 397
+Words only in A
+ARETE
+EATERIE
+SEGAR
+Words only in B
+
+Board:
+____________________
+| G | D | A | D | E |
+| I | C | T | E | D |
+| T | T | N | Y | D |
+| I | R | E | N | P |
+| A | U | Z | I | P |
+____________________
+
+
+Number of words: 288 | 288
+Words only in A
+Words only in B
+
+Board:
+____________________
+| T | F | O | R | I |
+| U | N | A | E | O |
+| U | E | T | E | E |
+| O | I | C | W | E |
+| A | T | B | O | U |
+____________________
+
+
+Number of words: 207 | 207
+Words only in A
+Words only in B
+
+Board:
+____________________
+| O | O | S | A | N |
+| L | C | Y | E | Y |
+| H | P | O | E | I |
+| O | O | F | F | R |
+| O | A | QU| S | E |
+____________________
+
+
+Number of words: 260 | 264
+Words only in A
+EFFEIRS
+QOPH
+Words only in B
+UA
+UAFF
+UAFFER
+UAFFERS
+UAFFS
+UOP
+

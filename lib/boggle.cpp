@@ -31,6 +31,8 @@ auto read_boggle_board_from_input() -> BoggleBoard
 	}
 	return board;
 }
+
+
 std::ostream& operator << (std::ostream& os, const BoggleBoard& board)
 {
 	for (int i = 0; i < 20; ++i)
@@ -56,17 +58,6 @@ std::ostream& operator << (std::ostream& os, const BoggleBoard& board)
 	return os;
 }
 
-std::string trace_word(TrieNode* trie)
-{
-	std::string word = "";
-	auto curr = trie;
-	while (curr->letter != '*')
-	{
-		word.push_back(curr->letter);
-	}
-	std::reverse(word.begin(), word.end());
-	return word;
-}
 
 void trie_insert(TrieNode& root, std::string word)
 {
@@ -82,6 +73,7 @@ void trie_insert(TrieNode& root, std::string word)
 	}
 	curr->terminal = true;
 }
+
 
 bool trie_contains (TrieNode& root, std::string word)
 {
@@ -276,13 +268,13 @@ auto score_word (const std::string& word) -> int
 	return 0;
 }
 
-auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::vector<std::string> 
+
+auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::pair<int, std::vector<std::string>>
 {
 	std::ifstream file { filepath }; 
 	if (!file) { std::cout << "Couldn't open file " << filepath << '\n'; }
 	std::vector<std::string> results;
 	std::string word;
-	printf("Board contains...\n");
 	int maximumScore = 0;
 	while (file >> word)
 	{
@@ -291,12 +283,10 @@ auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::vec
 		if (board_contains(board, word))
 		{
 			maximumScore += score_word(word);
-			printf("[x] '%s'\n", word.c_str());
 			results.push_back(word);
 		}
 	}
-	printf("Best possible score with this board: %d\n", maximumScore);
-	return results;
+	return std::make_pair(maximumScore, results);
 }
 
 

@@ -42,7 +42,7 @@ int main ()
 	construct_trie(root, WORDS_FILE); 
 
 	auto wordsFromTrieSearch = find_all_words_with_trie(board, &root);
-	auto allWords = find_all_words(board, WORDS_FILE);
+	auto [maxScore, allWords] = find_all_words(board, WORDS_FILE);
 	std::set<std::string> allWordsSet (allWords.begin(), allWords.end());
 
 	// Find difference between two search methods.
@@ -52,7 +52,6 @@ int main ()
 			std::inserter(difference, difference.begin()));
 
 	log << "Board:\n" << board << "\n\n";
-	// Report on difference
 	report_differences(log, allWordsSet, wordsFromTrieSearch);
 	log << std::endl;
 

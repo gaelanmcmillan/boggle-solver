@@ -43,6 +43,6 @@ auto find_all_words_with_trie(const BoggleBoard& board, TrieNode* root) -> std::
 bool search_from(const BoggleBoard& board, int r, int c, const std::string& word);
 bool board_contains (const BoggleBoard& board, const std::string& word);
 auto score_word (const std::string& word) -> int;
-auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::vector<std::string>;
+auto find_all_words (const BoggleBoard& board, std::string filepath) -> std::pair<int,std::vector<std::string>>;
 
 
