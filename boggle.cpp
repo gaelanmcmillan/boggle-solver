@@ -1,3 +1,5 @@
+#pragma once
+
 #include <set>
 #include <iostream>
 #include <fstream>
@@ -7,7 +9,15 @@
 #include <string>
 #include <algorithm>
 #include <numeric>
-#include "boggle.h"
+
+const int SZ = 5;
+
+struct BoggleTile
+{
+	std::string value;
+};
+
+using BoggleBoard = std::array<std::array<BoggleTile, 5>, 5>;
 
 std::ostream& operator << (std::ostream& os, const BoggleBoard& board)
 {
@@ -33,6 +43,17 @@ std::ostream& operator << (std::ostream& os, const BoggleBoard& board)
 	os << '\n';
 	return os;
 }
+
+struct TrieNode
+{
+	char letter;
+	bool terminal;
+	std::array<TrieNode*, 26> children;
+	TrieNode (char ch) : letter (ch), terminal (false)
+	{
+		for (auto& ptr : children) ptr = nullptr;
+	}
+};
 
 std::string trace_word(TrieNode* trie)
 {
@@ -109,7 +130,7 @@ inline int mask_from(int r, int c)
 }
 
 
-void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::string>& foundWords, std::string& currentWord, int r, int c, int seen)
+void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::string>& foundWords, std::string& currentWord, int r = 0, int c = 0, int seen = 0)
 {
 	currentWord.push_back(trie->letter);
 	seen |= mask_from(r, c);
@@ -141,7 +162,7 @@ void trie_guided_search(const BoggleBoard& board, TrieNode* trie, std::set<std::
 	currentWord.pop_back();
 }
 
-auto find_all_words_with_trie(const BoggleBoard& board, TrieNode* root) -> std::set<std::string>
+auto find_all_words_with_trie(const BoggleBoard& board, TrieNode* root)
 {
 	std::string currentWord = "";
 	std::set<std::string> foundWords;
