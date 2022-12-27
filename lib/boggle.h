@@ -32,7 +32,7 @@ struct TrieNode
 	}
 };
 
-std::string trace_word(TrieNode* trie);
+auto read_boggle_board_from_input() -> BoggleBoard;
 void trie_insert(TrieNode& root, std::string word);
 bool trie_contains (TrieNode& root, std::string word);
 auto construct_trie (TrieNode& root, std::string filepath) -> void;

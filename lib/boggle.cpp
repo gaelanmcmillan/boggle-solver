@@ -9,6 +9,28 @@
 #include <numeric>
 #include "boggle.h"
 
+auto read_boggle_board_from_input() -> BoggleBoard
+{
+	BoggleBoard board {};
+
+	for (auto& row : board)
+	{
+		std::string rawRow;
+		std::cin >> rawRow;
+		auto letter = rawRow.begin();
+		for (auto& tile : row)
+		{
+			if (*letter == 'Q')	{
+				tile.value = "QU";
+				letter++;
+			} else {
+				tile.value = *letter;
+			}
+			letter++;
+		}
+	}
+	return board;
+}
 std::ostream& operator << (std::ostream& os, const BoggleBoard& board)
 {
 	for (int i = 0; i < 20; ++i)
